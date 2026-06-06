@@ -1,47 +1,50 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<output id="output"></output>
+<!-- https://www.jsdelivr.com/package/npm/markdown -->
+<script src="https://cdn.jsdelivr.net/npm/markdown@0.5.0/lib/markdown.min.js"></script>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Language Model Status</title>
-    <!-- https://www.jsdelivr.com/package/npm/markdown -->
-    <script src="https://cdn.jsdelivr.net/npm/markdown@0.5.0/lib/markdown.min.js"></script>
-    <script src="script.js" defer></script>
-    <link rel="stylesheet" href="style.css">
-</head>
+<script>
+    const output = document.getElementById('output');
 
-<body>
-    <header>
-        <h1>Painel da Inteligência Artificial</h1>
-        <p>Monitoramento e Interação com Modelos Locais</p>
-    </header>
+    ;(async () => {
+        const temperature = 1;
+        const topK = 3;
 
-    <div class="container">
-        <!-- Card de Status -->
-        <div id="status-card" class="chat-card" style="display: flex; flex-direction: column; align-items: center;">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                <h1 style="margin:0; font-size:1.5rem; border: none; padding: 0;">Status do LanguageModel:</h1>
-                <span id="status-badge" style="color: white; padding: 6px 14px; border-radius: 20px; text-transform: uppercase">...</span>
-            </div>
-            <hr style="width: 100%; border: 1px solid #4A5568; margin-bottom: 15px;" />
-            <p id="status-text" style="text-align: center; margin-top: 0; margin-bottom: 0;">
-                Verificando disponibilidade do modelo...
-            </p>
-        </div>
-        
-        <!-- Card de Sessão/Resposta IA -->
-        <div class="chat-card">
-            <h2>💬 Chat com a IA</h2>
-            <div class="prompt-question">
-                <strong>Pergunta:</strong> Como surgiu o c#?
-            </div>
-            
-            <div id="session" class="ai-response">
-                <em style="color: #A0AEC0;">Aguardando resposta do modelo...</em>
-            </div>
-        </div>
-    </div>
-</body>
+        const initialPrompts = [
+            {
+                role: 'system',
+                content: `Você é um assistente de IA que responde de forma clara e objetiva.`
+            }
+        ];
 
-</html>
+        const question = 'Quem inventou o JavaScript?';
+        output.innerHTML = "Gerando resposta...";
+
+        const session = await LanguageModel.create({
+            expectedInputLanguages: ["pt"],
+            expectedOutputLanguages: ["pt"],
+            temperature,
+            topK,
+            initialPrompts,
+            monitor(m) {
+                m.addEventListener('downloadprogress', (e) => {
+                    const pct = Math.round(e.loaded / e.total * 100);
+                    output.innerHTML = `Baixando modelo: ${pct}%`;
+                });
+            }
+        });
+
+        const responseStream = await session.promptStreaming([
+            {
+                role: 'user',
+                content: question
+            }
+        ]);
+
+        output.innerHTML = "";
+        let fullText = "";
+        for await (const token of responseStream) {
+            fullText += token;
+            output.innerHTML = markdown.toHTML(fullText);
+        }
+    })();
+</script>
