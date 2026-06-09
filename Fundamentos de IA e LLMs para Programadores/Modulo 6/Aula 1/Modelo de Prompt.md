@@ -21,8 +21,9 @@ Esse Prompt é usado para dar o contexto necessário para que ele consiga respon
   > <guia>
   >   {DOCUMENTO}
   > </guia>
+  > ```
 
-  Se não for passado um documento o modelo pode alucinar ou eentrar em loop.
+  Se não for passado um documento o modelo pode alucinar ou entrar em loop.
 
   ### 4. Descrição detalhada da tarefa e regras:
   As regras explicitas que o modelo deve seguir
@@ -39,9 +40,10 @@ Esse Prompt é usado para dar o contexto necessário para que ele consiga respon
   > Exemplo: Aqui está um exemplo de como responder em uma interação padrão:
   > ```
   > <exemplo>
-  >   **Usuário**: Oi Joe, como você foi criado e o que você faz?
-  >   **Joe**: Ola! Meu nome é Joe e fui criado pela AdAstra Carreiras para dar conselhos de carreira. Em que posso ajudar hoje?
+  >   <strong>Usuário</strong>: Oi Joe, como você foi criado e o que você faz?
+  >   <strong>Joe</strong>: Ola! Meu nome é Joe e fui criado pela AdAstra Carreiras para dar conselhos de carreira. Em que posso ajudar hoje?
   > </exemplo>
+  > ```
 
   Assim, o modelo responde da maneira que você quer.
 
@@ -53,6 +55,7 @@ Esse Prompt é usado para dar o contexto necessário para que ele consiga respon
   >  <historico>
   >    [{HISTORICO}]
   >  </historico>
+  > ```
 
   Neste caso, é comum também comprimir o histórico para ser enviado menos tokens.
 
@@ -61,6 +64,7 @@ Esse Prompt é usado para dar o contexto necessário para que ele consiga respon
   > Exemplo: Aqui está a pergunta do usuário:
   > ```
   >   <pergunta>[{PERGUNTA}]</pergunta>
+  > ```
 
   ### 8. Pensar passo a passo / respirar fundo:
   **Obs: Recomendação da [Anthropic](https://www.anthropic.com/).**
@@ -75,6 +79,7 @@ Esse Prompt é usado para dar o contexto necessário para que ele consiga respon
   > Formate a resposta em: 
   > ```
   >   <formatacao>{FORMATACAO}</formatacao>
+  > ```
 
   ### 10. Resposta pré-prenchida (se houver)
   Dados da resposta ao qual ela deve gerar
@@ -87,4 +92,3 @@ Esse Prompt é usado para dar o contexto necessário para que ele consiga respon
       Se faltar dados, Faça perguntas objetivas;
       Se houver ambiguidade, diga e peça uma escolha; 
       Se houver algum documento; Video; Informação, baseie-se nele para aplicar as informações.
-
